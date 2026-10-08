@@ -21,20 +21,24 @@ async function main(): Promise<void> {
     await page.waitForTimeout(1000);
 
     const formDetails = await page.evaluate(() => {
-      const selectDetails = Array.from(document.querySelectorAll("select")).map(
-        (select, index) => ({
-          index,
-          id: select.id,
-          name: select.getAttribute("name"),
-          labels: Array.from(select.labels ?? []).map((label) =>
-            label.innerText.trim(),
-          ),
-          options: Array.from(select.options).map((option) => ({
-            text: option.text.trim(),
+      const selectDetails = Array.from(
+        document.querySelectorAll(
+          "select#id_i_bench_id_case_no, " +
+            "select#id_i_case_type_caseno, " +
+            "select#id_i_case_year_caseno",
+        ),
+      ).map((select) => ({
+        id: select.id,
+        options: Array.from((select as HTMLSelectElement).options).map(
+          (option) => ({
+            text: option.textContent?.trim(),
+            label: option.label,
             value: option.value,
-          })),
-        }),
-      );
+            dataContent: option.getAttribute("data-content"),
+            html: option.outerHTML,
+          }),
+        ),
+      }));
 
       const inputDetails = Array.from(document.querySelectorAll("input")).map(
         (input) => ({
