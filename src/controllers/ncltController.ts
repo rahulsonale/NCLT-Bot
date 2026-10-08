@@ -1,3 +1,5 @@
+import { Request, Response } from "express";
+import { runNcltCaseSearch } from "../routes/automation/sources/nclt/nclt.source";
 import { NcltSearchInput } from "../routes/automation/sources/nclt/nclt.types";
 
 type ParseResult =
@@ -11,7 +13,7 @@ function readText(value: unknown): string | undefined {
   return trimmed.length > 0 ? trimmed : undefined;
 }
 
-export function parseNcltSearchInput(body: unknown): ParseResult {
+function parseNcltSearchInput(body: unknown): ParseResult {
   if (typeof body !== "object" || body === null || Array.isArray(body)) {
     return { ok: false, errors: ["Request body must be a JSON object."] };
   }
@@ -26,6 +28,7 @@ export function parseNcltSearchInput(body: unknown): ParseResult {
   if (!bench) errors.push("bench is required.");
   if (!caseType) errors.push("caseType is required.");
   if (!caseNumber) errors.push("caseNumber is required.");
+
   if (!caseYear) {
     errors.push("caseYear is required.");
   } else if (!/^\d{4}$/.test(caseYear)) {
@@ -45,4 +48,25 @@ export function parseNcltSearchInput(body: unknown): ParseResult {
       caseYear: caseYear!,
     },
   };
+}
+
+export async function searchNcltCase(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const parsed = parseNcltSearchInput(req.body);
+
+  if (!parsed.ok) {
+    res.status(400).json({
+      source: "nclt",
+      status: "error",
+      errors: parsed.errors,
+    });
+    return;
+  }
+
+  const result = await runNcltCaseSearch(parsed.value);
+  const httpStatus = result.status === "error" ? 502 : 200;
+
+  res.status(httpStatus).json(result);
 }
