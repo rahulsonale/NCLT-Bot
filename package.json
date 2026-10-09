@@ -14,7 +14,8 @@
     "inspect:nclt-orders": "ts-node src/scripts/inspect-nclt-orders.ts",
     "search:nclt-order": "ts-node src/scripts/search-nclt-order.ts",
     "inspect:nclt-order-pdf": "ts-node src/scripts/inspect-nclt-order-pdf.ts",
-    "ocr:nclt-order": "ts-node src/scripts/ocr-nclt-order-pdf.ts"
+    "ocr:nclt-order": "ts-node src/scripts/ocr-nclt-order-pdf.ts",
+    "check:mongodb": "ts-node src/scripts/check-mongodb.ts"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "mongodb": "^7.7.0",
     "pdf-parse": "^2.4.5",
     "playwright": "^1.64.0",
     "tesseract.js": "^7.0.0"

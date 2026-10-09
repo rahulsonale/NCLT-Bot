@@ -1,0 +1,122 @@
+[
+  {
+    "pdf": "01_2023-06-30.pdf",
+    "status": "success",
+    "extractedJson": "01_2023-06-30.extracted.json"
+  },
+  {
+    "pdf": "02_2023-04-25.pdf",
+    "status": "success",
+    "extractedJson": "02_2023-04-25.extracted.json"
+  },
+  {
+    "pdf": "03_2023-03-13.pdf",
+    "status": "success",
+    "extractedJson": "03_2023-03-13.extracted.json"
+  },
+  {
+    "pdf": "04_2023-02-16.pdf",
+    "status": "success",
+    "extractedJson": "04_2023-02-16.extracted.json"
+  },
+  {
+    "pdf": "05_2022-12-19.pdf",
+    "status": "success",
+    "extractedJson": "05_2022-12-19.extracted.json"
+  },
+  {
+    "pdf": "06_2022-10-28.pdf",
+    "status": "success",
+    "extractedJson": "06_2022-10-28.extracted.json"
+  },
+  {
+    "pdf": "07_2022-08-30.pdf",
+    "status": "success",
+    "extractedJson": "07_2022-08-30.extracted.json"
+  },
+  {
+    "pdf": "08_2022-07-22.pdf",
+    "status": "success",
+    "extractedJson": "08_2022-07-22.extracted.json"
+  },
+  {
+    "pdf": "09_2022-06-07.pdf",
+    "status": "success",
+    "extractedJson": "09_2022-06-07.extracted.json"
+  },
+  {
+    "pdf": "10_2022-05-30.pdf",
+    "status": "success",
+    "extractedJson": "10_2022-05-30.extracted.json"
+  },
+  {
+    "pdf": "11_2022-04-08.pdf",
+    "status": "success",
+    "extractedJson": "11_2022-04-08.extracted.json"
+  },
+  {
+    "pdf": "12_2022-03-08.pdf",
+    "status": "success",
+    "extractedJson": "12_2022-03-08.extracted.json"
+  },
+  {
+    "pdf": "13_2022-02-17.pdf",
+    "status": "success",
+    "extractedJson": "13_2022-02-17.extracted.json"
+  },
+  {
+    "pdf": "14_2022-01-27.pdf",
+    "status": "success",
+    "extractedJson": "14_2022-01-27.extracted.json"
+  },
+  {
+    "pdf": "15_2022-01-07.pdf",
+    "status": "success",
+    "extractedJson": "15_2022-01-07.extracted.json"
+  },
+  {
+    "pdf": "16_2021-12-14.pdf",
+    "status": "success",
+    "extractedJson": "16_2021-12-14.extracted.json"
+  },
+  {
+    "pdf": "17_2021-11-15.pdf",
+    "status": "success",
+    "extractedJson": "17_2021-11-15.extracted.json"
+  },
+  {
+    "pdf": "18_2021-10-04.pdf",
+    "status": "success",
+    "extractedJson": "18_2021-10-04.extracted.json"
+  },
+  {
+    "pdf": "19_2021-08-27.pdf",
+    "status": "success",
+    "extractedJson": "19_2021-08-27.extracted.json"
+  },
+  {
+    "pdf": "20_2021-07-16.pdf",
+    "status": "success",
+    "extractedJson": "20_2021-07-16.extracted.json"
+  },
+  {
+    "pdf": "21_2021-03-12.pdf",
+    "status": "success",
+    "extractedJson": "21_2021-03-12.extracted.json"
+  },
+  {
+    "pdf": "22_2021-01-27.pdf",
+    "status": "success",
+    "extractedJson": "22_2021-01-27.extracted.json"
+  },
+  {
+    "pdf": "23_2020-09-29.pdf",
+    "status": "success",
+    "extractedJson": "23_2020-09-29.extracted.json"
+  },
+  {
+    "pdf": "24_2020-08-19.pdf",
+    "status": "success",
+    "extractedJson": "24_2020-08-19.extracted.json"
+  }
+]
