@@ -3,6 +3,31 @@ import * as path from "node:path";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
 import { openNcltBrowser } from "../routes/automation/core/browser";
+import { createHash } from "node:crypto";
+
+interface SavedOrderRecord {
+  listingDate: string | null;
+  sourceUrl: string;
+  fileName: string | null;
+  sha256: string | null;
+  status: "downloaded" | "duplicate" | "error";
+  duplicateOf?: string;
+  error?: string;
+}
+
+function isOfficialNcltUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.toLowerCase();
+
+    return (
+      url.protocol === "https:" &&
+      (hostname === "nclt.gov.in" || hostname.endsWith(".nclt.gov.in"))
+    );
+  } catch {
+    return false;
+  }
+}
 
 async function main(): Promise<void> {
   const [
@@ -157,6 +182,134 @@ async function main(): Promise<void> {
 
     console.log("Case details:");
     console.log(JSON.stringify(caseDetails, null, 2));
+
+    const caseFolder = `${bench}-${caseType}-${caseNumber}-${year}`.replace(
+      /[^a-z0-9_-]/gi,
+      "_",
+    );
+    const ordersDir = path.join(outputDir, "orders", caseFolder);
+    fs.mkdirSync(ordersDir, { recursive: true });
+
+    const manifestPath = path.join(ordersDir, "manifest.json");
+    let manifest: SavedOrderRecord[] = [];
+
+    if (fs.existsSync(manifestPath)) {
+      manifest = JSON.parse(
+        fs.readFileSync(manifestPath, "utf8"),
+      ) as SavedOrderRecord[];
+    }
+
+    for (const [index, order] of caseDetails.orderDocuments.entries()) {
+      const previousRecord = manifest.find(
+        (record) => record.sourceUrl === order.url,
+      );
+
+      if (
+        previousRecord &&
+        previousRecord.status !== "error" &&
+        previousRecord.fileName &&
+        fs.existsSync(path.join(ordersDir, previousRecord.fileName))
+      ) {
+        console.log(`Already downloaded; skipping ${order.url}`);
+        continue;
+      }
+
+      const listingDate =
+        order.surroundingText.match(/\b\d{2}-\d{2}-\d{4}\b/)?.[0] ?? null;
+      const sequence =
+        order.surroundingText.match(/^\s*(\d+)/)?.[1] ?? String(index + 1);
+
+      try {
+        if (!isOfficialNcltUrl(order.url)) {
+          throw new Error("Order URL is outside the official NCLT domain.");
+        }
+
+        const response = await fetch(order.url, { redirect: "follow" });
+
+        if (!isOfficialNcltUrl(response.url)) {
+          throw new Error("The order URL redirected outside the NCLT domain.");
+        }
+
+        if (!response.ok) {
+          throw new Error(`Download failed with status ${response.status}.`);
+        }
+
+        const pdfData = Buffer.from(await response.arrayBuffer());
+
+        if (pdfData.subarray(0, 5).toString("ascii") !== "%PDF-") {
+          throw new Error("The downloaded document is not a valid PDF.");
+        }
+
+        const sha256 = createHash("sha256").update(pdfData).digest("hex");
+        const duplicate = manifest.find((record) => record.sha256 === sha256);
+
+        const dateForFile = listingDate
+          ? listingDate.replace(/^(\d{2})-(\d{2})-(\d{4})$/, "$3-$2-$1")
+          : "unknown-date";
+
+        const fileName =
+          duplicate?.fileName ??
+          `${sequence.padStart(2, "0")}_${dateForFile}.pdf`;
+
+        if (!duplicate) {
+          fs.writeFileSync(path.join(ordersDir, fileName), pdfData);
+        }
+
+        const record: SavedOrderRecord = {
+          listingDate,
+          sourceUrl: order.url,
+          fileName,
+          sha256,
+          status: duplicate ? "duplicate" : "downloaded",
+          ...(duplicate ? { duplicateOf: duplicate.sourceUrl } : {}),
+        };
+
+        const existingIndex = manifest.findIndex(
+          (item) => item.sourceUrl === order.url,
+        );
+
+        if (existingIndex >= 0) {
+          manifest[existingIndex] = record;
+        } else {
+          manifest.push(record);
+        }
+
+        fs.writeFileSync(
+          manifestPath,
+          JSON.stringify(manifest, null, 2),
+          "utf8",
+        );
+        console.log(`${record.status}: ${fileName}`);
+      } catch (error) {
+        const record: SavedOrderRecord = {
+          listingDate,
+          sourceUrl: order.url,
+          fileName: null,
+          sha256: null,
+          status: "error",
+          error: error instanceof Error ? error.message : String(error),
+        };
+
+        const existingIndex = manifest.findIndex(
+          (item) => item.sourceUrl === order.url,
+        );
+
+        if (existingIndex >= 0) {
+          manifest[existingIndex] = record;
+        } else {
+          manifest.push(record);
+        }
+
+        fs.writeFileSync(
+          manifestPath,
+          JSON.stringify(manifest, null, 2),
+          "utf8",
+        );
+        console.error(`Failed to download order ${index + 1}:`, record.error);
+      }
+    }
+
+    console.log(`Order PDFs and manifest saved in ${ordersDir}`);
 
     await page.screenshot({
       path: path.join(outputDir, "nclt-case-order-details.png"),
