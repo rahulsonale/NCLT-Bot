@@ -11,7 +11,13 @@ const CASE_HISTORY_URL =
 function textOrNull(value: string | undefined): string | null {
   const cleaned = value?.replace(/\s+/g, " ").trim();
 
-  if (!cleaned || /^n\/?a$/i.test(cleaned) || cleaned === "-") {
+  if (!cleaned || cleaned === "-") {
+    return null;
+  }
+
+  const parts = cleaned.split("/").map((part) => part.trim());
+
+  if (parts.every((part) => /^n\/?a$/i.test(part) || part === "-")) {
     return null;
   }
 
@@ -82,8 +88,33 @@ export async function runNcltCaseSearch(
       };
     }
 
-    await page.getByRole("button", { name: "Search", exact: true }).click();
-    await page.waitForTimeout(1500);
+    await page.locator("a.searchBtn:visible").click();
+    await page
+      .waitForFunction(
+        () => {
+          const tables = Array.from(document.querySelectorAll("table"));
+          const resultTable = tables.find((table) =>
+            Array.from(table.querySelectorAll("th")).some((header) =>
+              /filing\s*no/i.test(header.innerText),
+            ),
+          );
+
+          const hasRows =
+            !!resultTable &&
+            Array.from(resultTable.querySelectorAll("tr")).some(
+              (row) => row.querySelectorAll("td").length > 0,
+            );
+
+          const noResults = /no records|no results|record not found/i.test(
+            document.body.innerText,
+          );
+
+          return hasRows || noResults;
+        },
+        undefined,
+        { timeout: 20_000 },
+      )
+      .catch(() => {});
 
     if (await captchaIsVisible(page)) {
       return {

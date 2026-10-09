@@ -51,8 +51,21 @@ async function main(): Promise<void> {
           ),
         }),
       );
+      const clickTargets = Array.from(
+        document.querySelectorAll(
+          'button, input[type="button"], input[type="submit"], a',
+        ),
+      )
+        .filter((element) => (element as HTMLElement).offsetParent !== null)
+        .map((element) => ({
+          tag: element.tagName,
+          id: (element as HTMLElement).id,
+          text: (element as HTMLElement).innerText?.trim(),
+          value: (element as HTMLInputElement).value,
+          html: element.outerHTML,
+        }));
 
-      return { selectDetails, inputDetails };
+      return { selectDetails, inputDetails, clickTargets };
     });
 
     console.log(JSON.stringify(formDetails, null, 2));

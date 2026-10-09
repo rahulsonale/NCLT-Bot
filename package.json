@@ -7,7 +7,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "inspect:nclt": "ts-node src/scripts/inspect-nclt.ts"
+    "inspect:nclt": "ts-node src/scripts/inspect-nclt.ts",
+    "inspect:cause-list": "ts-node src/scripts/inspect-cause-list.ts"
   },
   "repository": {
     "type": "git",
