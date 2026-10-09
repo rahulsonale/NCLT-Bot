@@ -10,7 +10,11 @@
     "inspect:nclt": "ts-node src/scripts/inspect-nclt.ts",
     "inspect:cause-list": "ts-node src/scripts/inspect-cause-list.ts",
     "inspect:cause-list-pdf": "ts-node src/scripts/inspect-cause-list-pdf.ts",
-    "search:cause-list-pdf": "ts-node src/scripts/search-cause-list-pdf.ts"
+    "search:cause-list-pdf": "ts-node src/scripts/search-cause-list-pdf.ts",
+    "inspect:nclt-orders": "ts-node src/scripts/inspect-nclt-orders.ts",
+    "search:nclt-order": "ts-node src/scripts/search-nclt-order.ts",
+    "inspect:nclt-order-pdf": "ts-node src/scripts/inspect-nclt-order-pdf.ts",
+    "ocr:nclt-order": "ts-node src/scripts/ocr-nclt-order-pdf.ts"
   },
   "repository": {
     "type": "git",
@@ -27,7 +31,8 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "pdf-parse": "^2.4.5",
-    "playwright": "^1.64.0"
+    "playwright": "^1.64.0",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
