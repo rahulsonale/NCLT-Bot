@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "inspect:nclt": "ts-node src/scripts/inspect-nclt.ts",
-    "inspect:cause-list": "ts-node src/scripts/inspect-cause-list.ts"
+    "inspect:cause-list": "ts-node src/scripts/inspect-cause-list.ts",
+    "inspect:cause-list-pdf": "ts-node src/scripts/inspect-cause-list-pdf.ts"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "pdf-parse": "^2.4.5",
     "playwright": "^1.64.0"
   },
   "devDependencies": {
