@@ -9,7 +9,8 @@
     "start": "node dist/server.js",
     "inspect:nclt": "ts-node src/scripts/inspect-nclt.ts",
     "inspect:cause-list": "ts-node src/scripts/inspect-cause-list.ts",
-    "inspect:cause-list-pdf": "ts-node src/scripts/inspect-cause-list-pdf.ts"
+    "inspect:cause-list-pdf": "ts-node src/scripts/inspect-cause-list-pdf.ts",
+    "search:cause-list-pdf": "ts-node src/scripts/search-cause-list-pdf.ts"
   },
   "repository": {
     "type": "git",
