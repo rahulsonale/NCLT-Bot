@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { searchNcltCase } from "../controllers/ncltController";
+import { getNcltOrders, getSavedNcltCases, searchNcltCase } from "../controllers/ncltController";
 import {
   getNcltCauseList,
   searchNcltCauseListCase,
@@ -8,5 +8,7 @@ import {
 export const router = Router();
 
 router.post("/nclt/search", searchNcltCase);
+router.get("/nclt/cases", getSavedNcltCases);
+router.get("/nclt/orders", getNcltOrders);
 router.get("/nclt/cause-list/search", searchNcltCauseListCase);
 router.get("/nclt/cause-list", getNcltCauseList);

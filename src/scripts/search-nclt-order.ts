@@ -4,6 +4,7 @@ import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
 import { openNcltBrowser } from "../routes/automation/core/browser";
 import { createHash } from "node:crypto";
+import { makeNcltCaseKeyFromInput, saveNcltOrderMetadata } from "../routes/automation/sources/nclt/nclt.repository";
 
 interface SavedOrderRecord {
   listingDate: string | null;
@@ -279,6 +280,17 @@ async function main(): Promise<void> {
           JSON.stringify(manifest, null, 2),
           "utf8",
         );
+        try {
+          await saveNcltOrderMetadata({
+            caseKey: makeNcltCaseKeyFromInput({ bench, caseType, caseNumber, caseYear: year }),
+            sourceUrl: order.url,
+            pdfPath: path.join(ordersDir, fileName),
+            sha256,
+            ...(listingDate ? { hearingDate: listingDate } : {}),
+          });
+        } catch (error) {
+          console.error("Order downloaded, but MongoDB save failed:", error);
+        }
         console.log(`${record.status}: ${fileName}`);
       } catch (error) {
         const record: SavedOrderRecord = {

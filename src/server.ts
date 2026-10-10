@@ -1,11 +1,13 @@
 import express from "express";
 import cors from "cors";
 import { router } from "./routes";
+import path from "node:path";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.resolve(process.cwd(), "public")));
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true, service: "nclt-bot" });

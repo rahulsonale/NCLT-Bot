@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NCLT Case Desk</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="/">NCLT <span>Case Desk</span></a><span class="live"><i></i> Official source search</span></header>
+  <main>
+    <section class="intro"><p class="eyebrow">CASE INTELLIGENCE</p><h1>Find the details<br />that move a case forward.</h1><p class="sub">Search NCLT case records, check hearing lists, and review your recent lookups in one place.</p></section>
+    <div class="layout">
+      <section class="panel search-panel">
+        <div class="tabs"><button class="tab active" data-tab="case">Case search</button><button class="tab" data-tab="cause">Cause list</button></div>
+        <form id="case-form" class="form">
+          <label>Bench<select name="bench" required><option value="">Choose bench</option><option>National Company Law Tribunal, Principal Bench</option><option>National Company Law Tribunal, New Delhi Bench</option><option>National Company Law Tribunal, Mumbai Bench</option><option>National Company Law Tribunal, Cuttack Bench</option><option>National Company Law Tribunal, Ahmedabad Bench</option><option>National Company Law Tribunal, Amaravati Bench</option><option>National Company Law Tribunal, Chandigarh Bench</option><option>National Company Law Tribunal, Kolkata Bench</option><option>National Company Law Tribunal, Jaipur  Bench</option><option>National Company Law Tribunal, Bengaluru Bench</option><option>National Company Law Tribunal, Chennai Bench</option><option>National Company Law Tribunal, Guwahati Bench</option><option>National Company Law Tribunal, Hyderabad Bench</option><option>National Company Law Tribunal, Kochi Bench</option><option>National Company Law Tribunal, Indore</option><option>National Company Law Tribunal, Allahabad Bench</option></select></label>
+          <label>Case type<select name="caseType" required><option value="">Choose case type</option><option>Company Petition(Company Act)</option><option>Interlocutory Application(Company Act)</option><option>Miscellaneous Application(Company Act)</option><option>Company Application(Company Act)</option><option>Company Petition IB(IBC)</option><option>Company Application(IBC)</option><option>Interlocatory Application(IBC)</option><option>Miscellaneous Application(IBC)</option><option>Execution Petition(Company Act)</option><option>Transfer Application (IBC)(IBC)</option><option>Interlocutory Application(IBC)(Plan)(IBC)</option><option>Interlocutory Application(IBC)(Liq.)(IBC)</option></select></label>
+          <div class="row"><label>Case number<input name="caseNumber" placeholder="e.g. 356" required /></label><label>Year<input name="caseYear" inputmode="numeric" maxlength="4" placeholder="2019" required /></label></div>
+          <button class="primary" type="submit">Search NCLT records <span>→</span></button>
+          <p class="hint">For manual CAPTCHA completion, start the server with HEADED=1. The NCLT form opens in a browser window.</p>
+        </form>
+        <form id="cause-form" class="form hidden"><label>Case number<input name="caseNumber" placeholder="e.g. MA/356/2019" required /></label><label>Cause list PDF URL <span class="optional">optional</span><input name="documentUrl" type="url" placeholder="Paste an NCLT PDF link" /></label><button class="primary" type="submit">Find hearing matches <span>→</span></button><p class="hint">Leave the PDF URL blank to search the downloaded sample cause list.</p></form>
+      </section>
+      <section class="results-wrap"><div class="result-head"><div><p class="eyebrow">SEARCH RESULTS</p><h2 id="result-title">Ready when you are</h2></div><span id="result-count" class="count"></span></div><div id="results" class="results empty"><div class="empty-mark">⌕</div><p>Your case details and hearing matches will appear here.</p></div></section>
+    </div>
+    <section class="saved"><div class="result-head"><div><p class="eyebrow">YOUR WORKSPACE</p><h2>Recent case searches</h2></div><button id="refresh" class="secondary">Refresh ↻</button></div><div id="saved-cases" class="saved-grid"><p class="muted">Loading saved searches…</p></div></section>
+    <footer>Source data is retrieved from the official NCLT website. Please verify OCR extracted details against the original order PDF.</footer>
+  </main>
+  <script src="/app.js" defer></script>
+</body>
+</html>

@@ -76,7 +76,8 @@ export async function runNcltCaseSearch(
 
     await page.locator("#id_i_case_year_caseno").selectOption(input.caseYear);
 
-    if (await captchaIsVisible(page)) {
+    const captchaRequired = await captchaIsVisible(page);
+    if (captchaRequired && process.env.HEADED !== "1") {
       return {
         source: "nclt",
         status: "manual_action_required",
@@ -84,11 +85,11 @@ export async function runNcltCaseSearch(
         cases: [],
         sourceUrl: page.url(),
         checkedAt: new Date().toISOString(),
-        message: "The page requires a CAPTCHA; complete it manually.",
+        message: "The page requires a CAPTCHA. Set HEADED=1 and repeat the search to complete it in the opened browser.",
       };
     }
 
-    await page.locator("a.searchBtn:visible").click();
+    if (!captchaRequired) await page.locator("a.searchBtn:visible").click();
     await page
       .waitForFunction(
         () => {
@@ -112,7 +113,7 @@ export async function runNcltCaseSearch(
           return hasRows || noResults;
         },
         undefined,
-        { timeout: 20_000 },
+        { timeout: captchaRequired ? 120_000 : 20_000 },
       )
       .catch(() => {});
 
@@ -124,7 +125,9 @@ export async function runNcltCaseSearch(
         cases: [],
         sourceUrl: page.url(),
         checkedAt: new Date().toISOString(),
-        message: "The page requires a CAPTCHA; complete it manually.",
+        message: captchaRequired
+          ? "The search did not return after the CAPTCHA step. Check the opened browser and submit again."
+          : "The page requires a CAPTCHA; complete it manually.",
       };
     }
 
